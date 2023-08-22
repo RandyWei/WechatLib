@@ -3,6 +3,23 @@
 ## 怎么配置？
 
 在:shared模块下的build.gradle.kts增加如下配置
+
 ```kts
 implementation("")
 ```
+
+## iOS
+
+根据[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)
+配置好Universal Links、URL scheme、LSApplicationQueriesSchemes
+
+### API
+
+在程序入口处调用register方法注册APP到微信，可以设置selfCheck参数是否开启自检
+
+```kotlin
+Wechat.register(appID, universalLink, selfCheck = false)
+```
+
+#### 分享与收藏
+
