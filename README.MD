@@ -34,3 +34,56 @@ Wechat.register(appID, universalLink, selfCheck = false)
  */
 Wechat.share(mediaMessage, scene)
 ```
+
+#### 支付
+```kotlin
+/**
+     * 拉起支付
+     *
+     * @param partnerId
+     * @param prepayId
+     * @param packageStr
+     * @param nonceStr
+     * @param timeStamp
+     * @param sign
+     */
+Wechat.pay(partnerId,prepayId,packageStr,nonceStr, timeStamp,sign)
+```
+
+
+#### 微信登录
+```kotlin
+/**
+     *
+     *
+     * @param appId 应用唯一标识，在微信开放平台提交应用审核通过后获得
+     * @param state 用于保持请求和回调的状态，授权请求后原样带回给第三方。该参数可用于防止 csrf 攻击（跨站请求伪造攻击），建议第三方带上该参数，可设置为简单的随机数加 session 进行校验。在state传递的过程中会将该参数作为url的一部分进行处理，因此建议对该参数进行url encode操作，防止其中含有影响url解析的特殊字符（如'#'、'&'等）导致该参数无法正确回传。
+     *
+     */
+Wechat.auth(appId, state)
+```
+
+#### 拉起小程序
+
+```kotlin
+/**
+     * 拉起小程序
+     *
+     * @param userName 拉起的小程序的username
+     * @param miniProgramType 拉起小程序的类型[MiniProgramType]
+     * @param path 拉起小程序页面的可带参路径，不填默认拉起小程序首页，对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"。
+     */
+Wechat.launchMiniProgram(userName, miniProgramType, path)
+```
+
+#### 拉起微信客服
+```kotlin
+
+/**
+     * 拉起微信客服
+     *
+     * @param corpId 企业ID
+     * @param url 客服URL
+     */
+Wechat.launchCustomerService(corpId,url)
+```
