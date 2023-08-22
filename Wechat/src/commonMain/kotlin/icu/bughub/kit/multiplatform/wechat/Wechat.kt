@@ -8,4 +8,23 @@ expect object Wechat {
      * @param scene [WXScene]分享场景
      */
     fun share(mediaMessage: MediaMessage, scene: WXScene)
+
+    /**
+     * 拉起支付
+     *
+     * @param partnerId
+     * @param prepayId
+     * @param packageStr
+     * @param nonceStr
+     * @param timeStamp
+     * @param sign
+     */
+    fun pay(
+        partnerId: String,
+        prepayId: String,
+        packageStr: String,
+        nonceStr: String,
+        timeStamp: UInt,
+        sign: String
+    )
 }

@@ -1,20 +1,18 @@
 package icu.bughub.kit.multiplatform.wechat
 
+import cocoapods.WechatOpenSDK_XCFramework.PayReq
 import cocoapods.WechatOpenSDK_XCFramework.SendMessageToWXReq
 import cocoapods.WechatOpenSDK_XCFramework.WXApi
 import cocoapods.WechatOpenSDK_XCFramework.WXImageObject
 import cocoapods.WechatOpenSDK_XCFramework.WXLogLevelDetail
 import cocoapods.WechatOpenSDK_XCFramework.WXMediaMessage
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramObject
-import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramType
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypePreview
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypeRelease
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypeTest
 import cocoapods.WechatOpenSDK_XCFramework.WXMusicVideoObject
 import cocoapods.WechatOpenSDK_XCFramework.WXVideoObject
 import cocoapods.WechatOpenSDK_XCFramework.WXWebpageObject
-import platform.Foundation.NSData
-import platform.darwin.nil
 
 actual object Wechat {
 
@@ -44,7 +42,7 @@ actual object Wechat {
     /**
      * 分享
      *
-     * @param media
+     * @param mediaMessage
      * @param scene
      */
     actual fun share(mediaMessage: MediaMessage, scene: WXScene) {
@@ -143,6 +141,37 @@ actual object Wechat {
         req.scene = scene.ordinal
         WXApi.sendReq(req)
         {}
+
+    }
+
+    /**
+     * 拉起支付
+     *
+     * @param partnerId
+     * @param prepayId
+     * @param packageStr
+     * @param nonceStr
+     * @param timeStamp
+     * @param sign
+     */
+    actual fun pay(
+        partnerId: String,
+        prepayId: String,
+        packageStr: String,
+        nonceStr: String,
+        timeStamp: UInt,
+        sign: String
+    ) {
+
+        val payReq = PayReq()
+        payReq.partnerId = partnerId
+        payReq.prepayId = prepayId
+        payReq.`package` = packageStr
+        payReq.nonceStr = nonceStr
+        payReq.timeStamp = timeStamp
+        payReq.sign = sign
+
+        WXApi.sendReq(payReq) {}
 
     }
 }
