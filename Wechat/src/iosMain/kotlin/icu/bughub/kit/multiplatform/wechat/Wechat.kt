@@ -13,6 +13,7 @@ import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypePreview
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypeRelease
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypeTest
 import cocoapods.WechatOpenSDK_XCFramework.WXMusicVideoObject
+import cocoapods.WechatOpenSDK_XCFramework.WXOpenCustomerServiceReq
 import cocoapods.WechatOpenSDK_XCFramework.WXVideoObject
 import cocoapods.WechatOpenSDK_XCFramework.WXWebpageObject
 
@@ -213,5 +214,18 @@ actual object Wechat {
             MiniProgramType.Preview -> req.miniProgramType = WXMiniProgramTypePreview
         }
         req.path = path
+    }
+
+    /**
+     * 拉起微信客服
+     *
+     * @param corpId 企业ID
+     * @param url 客服URL
+     */
+    actual fun launchCustomerService(corpId: String, url: String) {
+        val req = WXOpenCustomerServiceReq()
+        req.corpid = corpId
+        req.url = url
+        WXApi.sendReq(req) {}
     }
 }

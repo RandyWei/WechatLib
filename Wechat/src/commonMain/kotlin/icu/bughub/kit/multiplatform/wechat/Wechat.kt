@@ -45,4 +45,13 @@ expect object Wechat {
      * @param path 拉起小程序页面的可带参路径，不填默认拉起小程序首页，对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"。
      */
     fun launchMiniProgram(userName: String, miniProgramType: MiniProgramType, path: String?)
+
+
+    /**
+     * 拉起微信客服
+     *
+     * @param corpId 企业ID
+     * @param url 客服URL
+     */
+    fun launchCustomerService(corpId:String,url:String)
 }
