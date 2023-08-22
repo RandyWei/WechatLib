@@ -2,10 +2,10 @@ package icu.bughub.kit.multiplatform.wechat
 
 expect object Wechat {
     /**
-     * 分享文本
+     * 分享
      *
-     * @param text
+     * @param mediaMessage
      * @param scene
      */
-    fun shareText(text: String, scene: WXScene)
+    fun share(mediaMessage: MediaMessage, scene: WXScene)
 }

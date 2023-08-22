@@ -2,11 +2,11 @@ package icu.bughub.kit.multiplatform.wechat
 
 actual object Wechat {
     /**
-     * 分享文本
+     * 分享
      *
-     * @param text
+     * @param mediaMessage
      * @param scene
      */
-    actual fun shareText(text: String, scene: WXScene) {
+    actual fun share(mediaMessage: MediaMessage, scene: WXScene) {
     }
 }
