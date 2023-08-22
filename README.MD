@@ -23,3 +23,12 @@ Wechat.register(appID, universalLink, selfCheck = false)
 
 #### 分享与收藏
 
+```kotlin
+/**
+ * 分享
+ *
+ * @param mediaMessage [MediaMessage]和官方属性是一一对应的WXMediaMessage，其中mediaObject也是和官方一一对应的
+ * @param scene [WXScene]分享场景
+ */
+Wechat.share(mediaMessage, scene)
+```
