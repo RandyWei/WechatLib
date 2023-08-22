@@ -59,6 +59,11 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+        val androidMain by getting {
+            dependencies {
+                api("com.tencent.mm.opensdk:wechat-sdk-android:6.8.24")
+            }
+        }
     }
 }
 
