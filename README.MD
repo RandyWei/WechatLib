@@ -1,6 +1,11 @@
 # 微信OPEN SDK Compose Multiplatform封装
 
+## 使用之前
 **<font color=red>这个library只是对官方SDK的一个封装，在阅读本文档前，请先仔细阅读[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)</font>**
+
+当前集成的Open SDK版本
+- Android:6.8.24
+- iOS:2.0.2
 
 ## 怎么配置？
 
@@ -56,11 +61,10 @@ Wechat.pay(partnerId,prepayId,packageStr,nonceStr, timeStamp,sign)
 /**
      *
      *
-     * @param appId 应用唯一标识，在微信开放平台提交应用审核通过后获得
      * @param state 用于保持请求和回调的状态，授权请求后原样带回给第三方。该参数可用于防止 csrf 攻击（跨站请求伪造攻击），建议第三方带上该参数，可设置为简单的随机数加 session 进行校验。在state传递的过程中会将该参数作为url的一部分进行处理，因此建议对该参数进行url encode操作，防止其中含有影响url解析的特殊字符（如'#'、'&'等）导致该参数无法正确回传。
      *
      */
-Wechat.auth(appId, state)
+Wechat.auth( state)
 ```
 
 #### 拉起小程序

@@ -158,6 +158,7 @@ actual object Wechat {
      * @param sign
      */
     actual fun pay(
+        appId: String,
         partnerId: String,
         prepayId: String,
         packageStr: String,
@@ -180,12 +181,10 @@ actual object Wechat {
 
     /**
      *
-     *
-     * @param appId 应用唯一标识，在微信开放平台提交应用审核通过后获得
      * @param state 用于保持请求和回调的状态，授权请求后原样带回给第三方。该参数可用于防止 csrf 攻击（跨站请求伪造攻击），建议第三方带上该参数，可设置为简单的随机数加 session 进行校验。在state传递的过程中会将该参数作为url的一部分进行处理，因此建议对该参数进行url encode操作，防止其中含有影响url解析的特殊字符（如'#'、'&'等）导致该参数无法正确回传。
      *
      */
-    actual fun auth(appId: String, state: String?) {
+    actual fun auth(state: String?) {
         val authReq = SendAuthReq()
         authReq.scope = "snsapi_userinfo"
         state?.let {
