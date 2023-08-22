@@ -36,4 +36,13 @@ expect object Wechat {
      *
      */
     fun auth(appId: String, state: String?)
+
+    /**
+     * 拉起小程序
+     *
+     * @param userName 拉起的小程序的username
+     * @param miniProgramType 拉起小程序的类型
+     * @param path 拉起小程序页面的可带参路径，不填默认拉起小程序首页，对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"。
+     */
+    fun launchMiniProgram(userName: String, miniProgramType: MiniProgramType, path: String?)
 }

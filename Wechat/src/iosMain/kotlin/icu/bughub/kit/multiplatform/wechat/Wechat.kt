@@ -5,6 +5,7 @@ import cocoapods.WechatOpenSDK_XCFramework.SendAuthReq
 import cocoapods.WechatOpenSDK_XCFramework.SendMessageToWXReq
 import cocoapods.WechatOpenSDK_XCFramework.WXApi
 import cocoapods.WechatOpenSDK_XCFramework.WXImageObject
+import cocoapods.WechatOpenSDK_XCFramework.WXLaunchMiniProgramReq
 import cocoapods.WechatOpenSDK_XCFramework.WXLogLevelDetail
 import cocoapods.WechatOpenSDK_XCFramework.WXMediaMessage
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramObject
@@ -189,6 +190,28 @@ actual object Wechat {
         state?.let {
             authReq.state = it
         }
-        WXApi.sendReq(authReq){}
+        WXApi.sendReq(authReq) {}
+    }
+
+    /**
+     * 拉起小程序
+     *
+     * @param userName 拉起的小程序的username
+     * @param miniProgramType 拉起小程序的类型
+     * @param path 拉起小程序页面的可带参路径，不填默认拉起小程序首页，对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"。
+     */
+    actual fun launchMiniProgram(
+        userName: String,
+        miniProgramType: MiniProgramType,
+        path: String?
+    ) {
+        val req = WXLaunchMiniProgramReq()
+        req.userName = userName
+        when (miniProgramType) {
+            MiniProgramType.Release -> req.miniProgramType = WXMiniProgramTypeRelease
+            MiniProgramType.Test -> req.miniProgramType = WXMiniProgramTypeTest
+            MiniProgramType.Preview -> req.miniProgramType = WXMiniProgramTypePreview
+        }
+        req.path = path
     }
 }
