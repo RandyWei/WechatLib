@@ -8,8 +8,8 @@ Pod::Spec.new do |spec|
     spec.summary                  = 'Some description for the Shared Module'
     spec.vendored_frameworks      = 'build/cocoapods/framework/Wechat.framework'
     spec.libraries                = 'c++'
-    spec.ios.deployment_target = '14.1'
-                
+    spec.ios.deployment_target = '11.0'
+    spec.dependency 'WechatOpenSDK-XCFramework', '2.0.2'
                 
     spec.pod_target_xcconfig = {
         'KOTLIN_PROJECT_PATH' => ':Wechat',

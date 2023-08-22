@@ -23,10 +23,29 @@ kotlin {
         summary = "Some description for the Shared Module"
         homepage = "Link to the Shared Module homepage"
         version = "1.0"
-        ios.deploymentTarget = "14.1"
+        ios.deploymentTarget = "11.0"
         framework {
             baseName = "Wechat"
         }
+
+        //配置微信open sdk，固定版本
+        pod("WechatOpenSDK-XCFramework"){
+            version = "2.0.2"
+        }
+
+        //处理微信SDK没有module问题
+        //参考文档：https://kotlinlang.org/docs/native-cocoapods.html#module-not-found
+        tasks.named<org.jetbrains.kotlin.gradle.tasks.DefFileTask>("generateDefWechatOpenSDK_XCFramework")
+            .configure {
+                doLast {
+                    outputFile.writeText(
+                        """
+                language = Objective-C
+                headers = WXApi.h
+            """.trimIndent()
+                    )
+                }
+            }
     }
     
     sourceSets {
