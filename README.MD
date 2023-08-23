@@ -124,7 +124,7 @@ Wechat.launchCustomerService(corpId,url)
 |title|String|消息标题|限制长度不超过512Bytes|
 |description|String|描述内容|限制长度不超过1KB|
 |thumbData|ByteArray|缩略图的二进制数据|限制内容大小不超过32KB|
-|mediaObject|MediaObject|多媒体数据对象|可以为TextObject、ImageObject、MusicVideoObject、VideoObject、WebpageObject、MusicVideoObject等|
+|mediaObject|MediaObject|多媒体数据对象|可以为[TextObject](#textobject-mediaobject-的派生类用于描述一个文本对象)、ImageObject、MusicVideoObject、VideoObject、WebpageObject、MusicVideoObject等|
 |messageExt|String|额外信息|mediaObject为WXMusicVideoObject时，从微信音乐播放器内跳回，会携带该参数，长度不能超过2k。（iOS、Android双平台要一致）|
 |thumbDataHash|String|消息缩略图数据的sha256|用于签名，详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
 |msgSignature|String|消息签名|详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
