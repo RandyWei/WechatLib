@@ -1,11 +1,17 @@
 package icu.bughub.kit.multiplatform.wechat
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
 import com.tencent.mm.opensdk.modelbiz.WXLaunchMiniProgram
 import com.tencent.mm.opensdk.modelbiz.WXOpenCustomerServiceChat
 import com.tencent.mm.opensdk.modelmsg.SendAuth
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
+import com.tencent.mm.opensdk.modelmsg.WXImageObject
+import com.tencent.mm.opensdk.modelmsg.WXTextObject
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage
+import com.tencent.mm.opensdk.modelmsg.WXMiniProgramObject
+import com.tencent.mm.opensdk.modelmsg.WXMusicVideoObject
+import com.tencent.mm.opensdk.modelmsg.WXVideoObject
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject
 import com.tencent.mm.opensdk.modelpay.PayReq
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
@@ -26,6 +32,72 @@ actual object Wechat {
      * @param scene
      */
     actual fun share(mediaMessage: MediaMessage, scene: WXScene) {
+        val msg = WXMediaMessage()
+        val req = SendMessageToWX.Req()
+        req.transaction = System.currentTimeMillis().toString()
+        val mediaObject = mediaMessage.mediaObject
+
+        when (mediaObject) {
+            is TextObject -> {
+                val obj = WXTextObject()
+                obj.text = mediaObject.text
+                msg.mediaObject = obj
+            }
+
+            is ImageObject -> {
+                val obj = WXImageObject()
+                obj.imageData = mediaObject.imageData
+                obj.imgDataHash = mediaObject.imgDataHash
+                if (mediaObject.imagePath.isNotEmpty()) {
+                    obj.imagePath = mediaObject.imagePath
+                }
+
+                msg.mediaObject = obj
+            }
+
+            is VideoObject -> {
+                val obj = WXVideoObject()
+                obj.videoUrl = mediaObject.videoUrl
+                obj.videoLowBandUrl = mediaObject.videoLowBandUrl
+                msg.mediaObject = obj
+            }
+
+            is WebpageObject -> {
+                val webpageObject = WXWebpageObject()
+                webpageObject.webpageUrl =mediaObject.webpageUrl
+                msg.mediaObject = webpageObject
+            }
+            is MiniProgramObject -> {
+                val miniObject = WXMiniProgramObject()
+                miniObject.webpageUrl = mediaObject.webpageUrl
+                miniObject.userName = mediaObject.userName
+                miniObject.path = mediaObject.path
+                miniObject.withShareTicket = mediaObject.withShareTicket
+                miniObject.miniprogramType = mediaObject.miniprogramType.ordinal
+
+                msg.mediaObject = miniObject
+            }
+            is MusicVideoObject -> {
+                val mvObject = WXMusicVideoObject()
+                mvObject.musicUrl = mediaObject.musicUrl
+                mvObject.musicDataUrl = mediaObject.musicDataUrl
+                mvObject.singerName = mediaObject.singerName
+                mvObject.duration = mediaObject.duration.toInt() //音乐时长，毫秒
+
+                mvObject.albumName = mediaObject.albumName
+                mvObject.songLyric = mediaObject.songLyric
+                mvObject.musicGenre = mediaObject.musicGenre
+                mvObject.issueDate = mediaObject.issueDate.toLong() //发行时间Unix时间戳
+                mvObject.identification = mediaObject.identification //音乐标识符
+                mvObject.hdAlbumThumbFileHash = mediaObject.hdAlbumThumbFileHash
+                mvObject.hdAlbumThumbFilePath = mediaObject.hdAlbumThumbFilePath
+            }
+            else -> {}
+        }
+        req.message = msg
+        req.scene = scene.ordinal
+
+        api.sendReq(req)
 
     }
 

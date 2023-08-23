@@ -23,6 +23,12 @@ data class ImageObject(
      */
     var imageData: ByteArray? = null,
     /**
+     * 图片的本地路径	对应图片内容大小不超过 25MB，
+     *
+     * 仅支持Android
+     */
+    var imagePath: String = "",
+    /**
      * 图片二进制数据的sha256
      */
     var imgDataHash: String? = null
@@ -37,6 +43,7 @@ data class ImageObject(
             if (other.imageData == null) return false
             if (!imageData.contentEquals(other.imageData)) return false
         } else if (other.imageData != null) return false
+        if (imagePath != other.imagePath) return false
         if (imgDataHash != other.imgDataHash) return false
 
         return true
@@ -44,9 +51,11 @@ data class ImageObject(
 
     override fun hashCode(): Int {
         var result = imageData?.contentHashCode() ?: 0
+        result = 31 * result + imagePath.hashCode()
         result = 31 * result + (imgDataHash?.hashCode() ?: 0)
         return result
     }
+
 }
 
 /**
@@ -191,6 +200,12 @@ data class MusicVideoObject(
      * 高清专辑封面图	选填，大小不超过1MB
      */
     var hdAlbumThumbData: ByteArray? = null,
+    /**
+     * 高清专辑图本地文件路径	选填，文件限制长度不超过1MB
+     *
+     * 仅Android支持
+     */
+    var hdAlbumThumbFilePath: String = "",
 
     /**
      * 音乐专辑名称	选填
@@ -236,6 +251,7 @@ data class MusicVideoObject(
             if (other.hdAlbumThumbData == null) return false
             if (!hdAlbumThumbData.contentEquals(other.hdAlbumThumbData)) return false
         } else if (other.hdAlbumThumbData != null) return false
+        if (hdAlbumThumbFilePath != other.hdAlbumThumbFilePath) return false
         if (albumName != other.albumName) return false
         if (songLyric != other.songLyric) return false
         if (musicGenre != other.musicGenre) return false
@@ -252,6 +268,7 @@ data class MusicVideoObject(
         result = 31 * result + singerName.hashCode()
         result = 31 * result + duration.hashCode()
         result = 31 * result + (hdAlbumThumbData?.contentHashCode() ?: 0)
+        result = 31 * result + hdAlbumThumbFilePath.hashCode()
         result = 31 * result + albumName.hashCode()
         result = 31 * result + songLyric.hashCode()
         result = 31 * result + musicGenre.hashCode()
