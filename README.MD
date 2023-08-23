@@ -1,4 +1,4 @@
-# 微信OPEN SDK Compose Multiplatform封装
+# 微信OPEN SDK For Compose Multiplatform
 
 ## 使用之前
 **<font color=red>这个library只是对官方SDK的一个封装，在阅读本文档前，请先仔细阅读[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)</font>**
@@ -15,20 +15,40 @@
 implementation("")
 ```
 
-## iOS
+### iOS
 
 根据[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)
 配置好Universal Links、URL scheme、LSApplicationQueriesSchemes
 
-### API
+### Android
 
-在程序入口处调用register方法注册APP到微信，可以设置selfCheck参数是否开启自检
+如果需要混淆代码，为了保证 sdk 的正常使用，需要在 proguard.cfg 加上下面两行配置：
+```text
+-keep class com.tencent.mm.opensdk.** {
+    *;
+}
 
-```kotlin
-Wechat.register(appID, universalLink, selfCheck = false)
+-keep class com.tencent.wxop.** {
+    *;
+}
+
+-keep class com.tencent.mm.sdk.** {
+    *;
+}
 ```
 
-#### 分享与收藏
+## API
+
+在程序入口处调用register方法注册APP到微信
+
+```kotlin
+//iOS,可以设置selfCheck参数是否开启自检
+Wechat.register(appID, universalLink, selfCheck = false)
+//android
+Wechat.register(context, appId)
+```
+
+### 分享与收藏
 
 ```kotlin
 /**
@@ -40,7 +60,7 @@ Wechat.register(appID, universalLink, selfCheck = false)
 Wechat.share(mediaMessage, scene)
 ```
 
-#### 支付
+### 支付
 ```kotlin
 /**
      * 拉起支付
@@ -56,7 +76,7 @@ Wechat.pay(partnerId,prepayId,packageStr,nonceStr, timeStamp,sign)
 ```
 
 
-#### 微信登录
+### 微信登录
 ```kotlin
 /**
      *
@@ -67,7 +87,7 @@ Wechat.pay(partnerId,prepayId,packageStr,nonceStr, timeStamp,sign)
 Wechat.auth( state)
 ```
 
-#### 拉起小程序
+### 拉起小程序
 
 ```kotlin
 /**
@@ -80,7 +100,7 @@ Wechat.auth( state)
 Wechat.launchMiniProgram(userName, miniProgramType, path)
 ```
 
-#### 拉起微信客服
+### 拉起微信客服
 ```kotlin
 
 /**
@@ -91,3 +111,10 @@ Wechat.launchMiniProgram(userName, miniProgramType, path)
      */
 Wechat.launchCustomerService(corpId,url)
 ```
+
+## 对象说明
+
+### MediaMessage（微信媒体消息内容）说明
+|字段|类型|含义|备注|
+|-|-|-|-|
+|title|String|消息标题|限制长度不超过512Bytes|
