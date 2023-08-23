@@ -321,4 +321,12 @@ actual object Wechat {
             eventHandlers.forEach { it.onResp(tmpResp) }
         }
     }
+
+    /**
+     * 唤起微信客户端
+     *
+     */
+    actual fun launch(): Boolean {
+        return WXApi.openWXApp()
+    }
 }

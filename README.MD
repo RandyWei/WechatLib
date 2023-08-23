@@ -149,6 +149,17 @@ Wechat.launchMiniProgram(userName, miniProgramType, path)
 Wechat.launchCustomerService(corpId, url)
 ```
 
+### 拉起微信客户端
+
+```kotlin
+
+/**
+ * 拉起微信
+ *
+ */
+Wechat.launch()
+```
+
 ## 对象说明
 
 ### [MediaMessage](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaMessage.kt)（微信媒体消息内容）说明

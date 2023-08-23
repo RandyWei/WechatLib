@@ -206,4 +206,12 @@ actual object Wechat {
 
     actual val eventHandlers: MutableSet<EventHandler>
         get() = mutableSetOf()
+
+    /**
+     * 唤起微信客户端
+     *
+     */
+    actual fun launch(): Boolean {
+        return api.openWXApp()
+    }
 }

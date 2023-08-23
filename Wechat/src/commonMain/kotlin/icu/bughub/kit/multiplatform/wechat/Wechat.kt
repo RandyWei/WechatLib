@@ -71,4 +71,10 @@ expect object Wechat {
      * @param url 客服URL
      */
     fun launchCustomerService(corpId: String, url: String)
+
+    /**
+     * 唤起微信客户端
+     *
+     */
+    fun launch():Boolean
 }
