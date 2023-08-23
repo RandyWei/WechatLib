@@ -3,8 +3,7 @@
 ## 使用之前
 
 **<font color=red>
-这个library只是对官方SDK的一个封装，在阅读本文档前，请先仔细阅读[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)</font>
-**
+这个library只是对官方SDK的一个封装，在阅读本文档前，请先仔细阅读[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)</font>**
 
 当前集成的Open SDK版本
 
