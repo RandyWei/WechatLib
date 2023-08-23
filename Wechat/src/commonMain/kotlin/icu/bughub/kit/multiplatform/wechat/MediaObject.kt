@@ -127,7 +127,7 @@ data class MiniProgramObject(
      * 测试版: WXMiniProgramTypeTest;
      * 体验版: WXMiniProgramTypePreview;
      */
-    var miniprogramType: MiniProgramType = MiniProgramType.Test
+    var miniprogramType: MiniProgramType = MiniProgramType.Release
 ) : MediaObject {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

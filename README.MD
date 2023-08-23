@@ -124,12 +124,76 @@ Wechat.launchCustomerService(corpId,url)
 |title|String|消息标题|限制长度不超过512Bytes|
 |description|String|描述内容|限制长度不超过1KB|
 |thumbData|ByteArray|缩略图的二进制数据|限制内容大小不超过32KB|
-|mediaObject|MediaObject|多媒体数据对象|可以为[TextObject](#textobject-mediaobject-的派生类用于描述一个文本对象)、ImageObject、MusicVideoObject、VideoObject、WebpageObject、MusicVideoObject等|
+|mediaObject|MediaObject|多媒体数据对象|可以为[TextObject](#textobject-mediaobject-的派生类用于描述一个文本对象)、[ImageObject](#imageobject-mediaobject-的派生类用于描述一个文本对象)、[VideoObject]((#videoobject-mediaobject-的派生类用于描述一个文本对象))、[WebpageObject]((#webpageobject-mediaobject-的派生类用于描述一个文本对象))、[MusicVideoObject]((#musicvideoobject-mediaobject-的派生类用于描述一个文本对象))|
 |messageExt|String|额外信息|mediaObject为WXMusicVideoObject时，从微信音乐播放器内跳回，会携带该参数，长度不能超过2k。（iOS、Android双平台要一致）|
 |thumbDataHash|String|消息缩略图数据的sha256|用于签名，详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
 |msgSignature|String|消息签名|详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
 
 ### [TextObject](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaObject.kt) (MediaObject 的派生类，用于描述一个文本对象)
+
+对应官方的WXTextObject，iOS版本也进行了封装
+
 |字段|类型|含义|备注|
 |-|-|-|-|
 |text|String|文本数据|长度需大于 0 且不超过 10KB|
+
+### [ImageObject](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaObject.kt) (MediaObject 的派生类，用于描述一个图片对象)
+
+对应官方的WXImageObject
+
+|字段|类型|含义|备注|
+|-|-|-|-|
+|imageData|ByteArray|图片的二进制数据|内容大小不超过 1MB|
+|imagePath|String|图片的本地路径|对应图片内容大小不超过 25MB|
+|imgDataHash|String|图片二进制数据的sha256|用于签名，详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
+
+### [VideoObject](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaObject.kt) (MediaObject 的派生类，用于描述一个视频对象)
+
+对应官方的WXVideoObject
+**注意：videoUrl 和 videoLowBandUrl 不能同时为空**
+
+|字段|类型|含义|备注|
+|-|-|-|-|
+|videoUrl|String|视频链接|限制长度不超过 10KB|
+|videoLowBandUrl|String|供低带宽的环境下使用的视频链接|限制长度不超过 10KB|
+
+### [WebpageObject](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaObject.kt) (MediaObject 的派生类，用于描述一个网页对象)
+
+对应官方的WXWebpageObject
+
+|字段|类型|含义|备注|
+|-|-|-|-|
+|webpageUrl|String|html 链接|限制长度不超过 10KB|
+
+### [MiniProgramObject](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaObject.kt) (MediaObject 的派生类，用于描述一个小程序对象)
+
+对应官方的WXMiniProgramObject
+
+|字段|类型|含义|备注|
+|-|-|-|-|
+|webpageUrl|String|兼容低版本的网页链接|限制长度不超过 10KB|
+|userName|String|小程序的原始 id|html 链接|小程序原始 ID 获取方法：登录小程序管理后台-设置-基本设置-账号信息|
+|path|String|小程序的 path|小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"|
+|withShareTicket|Boolean|是否使用带 shareTicket 的分享|通常开发者希望分享出去的小程序被二次打开时可以获取到更多信息，例如群的标识。可以设置 withShareTicket 为 true，当分享卡片在群聊中被其他用户打开时，可以获取到 shareTicket，用于获取更多分享信息。详见[小程序获取更多分享信息](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share.html) ，最低客户端版本要求：6.5.13|
+|miniprogramType|MiniprogramType|小程序的类型，默认正式版|正式版: MiniprogramType.Release;
+测试版: MiniprogramType.Test;
+预览版: MiniprogramType.Preview|
+
+### [MusicVideoObject](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaObject.kt) (MediaObject 的派生类，用于描述一个音乐视频对象)
+
+对应官方的WXMusicVideoObject
+
+|字段|类型|含义|备注|
+|-|-|-|-|
+|musicUrl|String|音频网页的 URL 地址|必填，不能为空，限制长度不超过 10KB|
+|musicDataUrl|String|音频数据的 URL 地址|必填，不能为空，限制长度不超过 10KB|
+|singerName|String|歌手名|必填，不能为空，限制长度不超过1KB|
+|duration|UInt|歌曲时长|必填，单位：毫秒|
+|songLyric|String|歌词|建议填写，限制长度不超过32KB|
+|hdAlbumThumbFilePath|String|高清专辑图本地文件路径|选填，文件限制长度不超过1MB，仅Android平台|
+|hdAlbumThumbData|ByteArray|高清专辑封面图|选填，大小不超过1MB，仅iOS平台|
+|albumName|String|音乐专辑名|选填|
+|musicGenre|String|音乐流派|选填|
+|issueDate|ULong|发行时间Unix时间戳|选填，单位：秒|
+|identification|String|音乐标识符|建议填写，用户在微信音乐播放器跳回应用时会携带该参数，可用于唯一标识一首歌，微信侧不理解|
+|hdAlbumThumbFileHash|String|高清专辑封面图sha256|用于签名，详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
