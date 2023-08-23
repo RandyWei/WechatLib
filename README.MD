@@ -1,11 +1,26 @@
 # 微信OPEN SDK For Compose Multiplatform
 
 ## 使用之前
-**<font color=red>这个library只是对官方SDK的一个封装，在阅读本文档前，请先仔细阅读[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)</font>**
+
+**<font color=red>
+这个library只是对官方SDK的一个封装，在阅读本文档前，请先仔细阅读[官方文档](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Access_Guide/iOS.html)</font>
+**
 
 当前集成的Open SDK版本
+
 - Android:6.8.24
 - iOS:2.0.2
+
+目前支持的功能：
+
+- [ x ] 拉起微信
+- [ x ] 拉起微信客服
+- [ x ] 拉起小程序
+- [ x ] 分享
+- [ x ] 支付
+- [ x ] 微信登录
+- [] 订阅消息
+- [] 监听微信向应用发送消息，如小程序或者公众号跳转到APP功能
 
 ## 怎么配置？
 
@@ -23,6 +38,7 @@ implementation("")
 ### Android
 
 如果需要混淆代码，为了保证 sdk 的正常使用，需要在 proguard.cfg 加上下面两行配置：
+
 ```text
 -keep class com.tencent.mm.opensdk.** {
     *;
@@ -42,11 +58,30 @@ implementation("")
 在程序入口处调用register方法注册APP到微信
 
 ```kotlin
-//iOS,可以设置selfCheck参数是否开启自检
-Wechat.register(appID, universalLink, selfCheck = false)
+
 //android
 Wechat.register(context, appId)
+
+//iOS,可以设置selfCheck参数是否开启自检
+Wechat.register(appID, universalLink, selfCheck = false)
+
+//重写 AppDelegate 的 handleOpenURL 和 openURL 方法：
+Wechat.handleOpenUrl(url)
+
+//重写AppDelegate或SceneDelegate的continueUserActivity方法： 注意：适配了SceneDelegate的App，系统将会回调SceneDelegate的continueUserActivity方法，所以需要重写SceneDelegate的该方法。
+Wechat.handleOpenUniversalLink(userActivity)
+
 ```
+
+注册回调监听
+
+```kotlin
+//只需要在想监听的地方注册监听即可
+Wechat.addEventHandler(eventHandler)
+//使用完后可以移除监听
+Wechat.removeEventHandler(eventHandler)
+```
+
 
 ### 分享与收藏
 
@@ -61,55 +96,57 @@ Wechat.share(mediaMessage, scene)
 ```
 
 ### 支付
+
 ```kotlin
 /**
-     * 拉起支付
-     *
-     * @param partnerId
-     * @param prepayId
-     * @param packageStr
-     * @param nonceStr
-     * @param timeStamp
-     * @param sign
-     */
-Wechat.pay(partnerId,prepayId,packageStr,nonceStr, timeStamp,sign)
+ * 拉起支付
+ *
+ * @param partnerId
+ * @param prepayId
+ * @param packageStr
+ * @param nonceStr
+ * @param timeStamp
+ * @param sign
+ */
+Wechat.pay(partnerId, prepayId, packageStr, nonceStr, timeStamp, sign)
 ```
 
-
 ### 微信登录
+
 ```kotlin
 /**
-     *
-     *
-     * @param state 用于保持请求和回调的状态，授权请求后原样带回给第三方。该参数可用于防止 csrf 攻击（跨站请求伪造攻击），建议第三方带上该参数，可设置为简单的随机数加 session 进行校验。在state传递的过程中会将该参数作为url的一部分进行处理，因此建议对该参数进行url encode操作，防止其中含有影响url解析的特殊字符（如'#'、'&'等）导致该参数无法正确回传。
-     *
-     */
-Wechat.auth( state)
+ *
+ *
+ * @param state 用于保持请求和回调的状态，授权请求后原样带回给第三方。该参数可用于防止 csrf 攻击（跨站请求伪造攻击），建议第三方带上该参数，可设置为简单的随机数加 session 进行校验。在state传递的过程中会将该参数作为url的一部分进行处理，因此建议对该参数进行url encode操作，防止其中含有影响url解析的特殊字符（如'#'、'&'等）导致该参数无法正确回传。
+ *
+ */
+Wechat.auth(state)
 ```
 
 ### 拉起小程序
 
 ```kotlin
 /**
-     * 拉起小程序
-     *
-     * @param userName 拉起的小程序的username
-     * @param miniProgramType 拉起小程序的类型[MiniProgramType]
-     * @param path 拉起小程序页面的可带参路径，不填默认拉起小程序首页，对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"。
-     */
+ * 拉起小程序
+ *
+ * @param userName 拉起的小程序的username
+ * @param miniProgramType 拉起小程序的类型[MiniProgramType]
+ * @param path 拉起小程序页面的可带参路径，不填默认拉起小程序首页，对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"。
+ */
 Wechat.launchMiniProgram(userName, miniProgramType, path)
 ```
 
 ### 拉起微信客服
+
 ```kotlin
 
 /**
-     * 拉起微信客服
-     *
-     * @param corpId 企业ID
-     * @param url 客服URL
-     */
-Wechat.launchCustomerService(corpId,url)
+ * 拉起微信客服
+ *
+ * @param corpId 企业ID
+ * @param url 客服URL
+ */
+Wechat.launchCustomerService(corpId, url)
 ```
 
 ## 对象说明
@@ -173,8 +210,12 @@ Wechat.launchCustomerService(corpId,url)
 |-|-|-|-|
 |webpageUrl|String|兼容低版本的网页链接|限制长度不超过 10KB|
 |userName|String|小程序的原始 id|html 链接|小程序原始 ID 获取方法：登录小程序管理后台-设置-基本设置-账号信息|
-|path|String|小程序的 path|小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "?foo=bar"|
-|withShareTicket|Boolean|是否使用带 shareTicket 的分享|通常开发者希望分享出去的小程序被二次打开时可以获取到更多信息，例如群的标识。可以设置 withShareTicket 为 true，当分享卡片在群聊中被其他用户打开时，可以获取到 shareTicket，用于获取更多分享信息。详见[小程序获取更多分享信息](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share.html) ，最低客户端版本要求：6.5.13|
+|path|String|小程序的 path|小程序页面路径；对于小游戏，可以只传入 query 部分，来实现传参效果，如：传入 "
+?foo=bar"|
+|withShareTicket|Boolean|是否使用带 shareTicket 的分享|通常开发者希望分享出去的小程序被二次打开时可以获取到更多信息，例如群的标识。可以设置
+withShareTicket 为 true，当分享卡片在群聊中被其他用户打开时，可以获取到
+shareTicket，用于获取更多分享信息。详见[小程序获取更多分享信息](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/share.html)
+，最低客户端版本要求：6.5.13|
 |miniprogramType|MiniprogramType|小程序的类型，默认正式版|正式版: MiniprogramType.Release;
 测试版: MiniprogramType.Test;
 预览版: MiniprogramType.Preview|

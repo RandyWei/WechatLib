@@ -1,11 +1,18 @@
 package icu.bughub.kit.multiplatform.wechat
 
+import cocoapods.WechatOpenSDK_XCFramework.BaseReq
+import cocoapods.WechatOpenSDK_XCFramework.BaseResp
 import cocoapods.WechatOpenSDK_XCFramework.PayReq
+import cocoapods.WechatOpenSDK_XCFramework.PayResp
 import cocoapods.WechatOpenSDK_XCFramework.SendAuthReq
+import cocoapods.WechatOpenSDK_XCFramework.SendAuthResp
 import cocoapods.WechatOpenSDK_XCFramework.SendMessageToWXReq
+import cocoapods.WechatOpenSDK_XCFramework.ShowMessageFromWXReq
 import cocoapods.WechatOpenSDK_XCFramework.WXApi
+import cocoapods.WechatOpenSDK_XCFramework.WXApiDelegateProtocol
 import cocoapods.WechatOpenSDK_XCFramework.WXImageObject
 import cocoapods.WechatOpenSDK_XCFramework.WXLaunchMiniProgramReq
+import cocoapods.WechatOpenSDK_XCFramework.WXLaunchMiniProgramResp
 import cocoapods.WechatOpenSDK_XCFramework.WXLogLevelDetail
 import cocoapods.WechatOpenSDK_XCFramework.WXMediaMessage
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramObject
@@ -14,8 +21,12 @@ import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypeRelease
 import cocoapods.WechatOpenSDK_XCFramework.WXMiniProgramTypeTest
 import cocoapods.WechatOpenSDK_XCFramework.WXMusicVideoObject
 import cocoapods.WechatOpenSDK_XCFramework.WXOpenCustomerServiceReq
+import cocoapods.WechatOpenSDK_XCFramework.WXPayInsuranceResp
 import cocoapods.WechatOpenSDK_XCFramework.WXVideoObject
 import cocoapods.WechatOpenSDK_XCFramework.WXWebpageObject
+import platform.Foundation.NSURL
+import platform.Foundation.NSUserActivity
+import platform.darwin.NSObject
 
 actual object Wechat {
 
@@ -226,5 +237,88 @@ actual object Wechat {
         req.corpid = corpId
         req.url = url
         WXApi.sendReq(req) {}
+    }
+
+    /**
+     * 注册微信回调
+     *
+     * @param url
+     * @return
+     */
+    fun handleOpenUrl(url: NSURL): Boolean {
+        return WXApi.handleOpenURL(url, delegate)
+    }
+
+    /**
+     * 注册微信回调
+     *
+     * @param userActivity
+     * @return
+     */
+    fun handleOpenUniversalLink(userActivity: NSUserActivity): Boolean {
+        return WXApi.handleOpenUniversalLink(
+            userActivity, delegate
+        )
+    }
+
+    /**
+     * 增加回调监听
+     *
+     * @param eventHandler
+     */
+    actual fun addEventHandler(eventHandler: EventHandler) {
+        eventHandlers.add(eventHandler)
+    }
+
+    /**
+     * 移除监听
+     *
+     * @param eventHandler
+     */
+    actual fun removeEventHandler(eventHandler: EventHandler) {
+        eventHandlers.remove(eventHandler)
+    }
+
+    actual val eventHandlers: MutableSet<EventHandler>
+        get() = mutableSetOf()
+
+    private val delegate = object : WXApiDelegateProtocol, NSObject() {
+        override fun onReq(req: BaseReq) {
+            val tmpReq = BaseReq(
+                "",
+                req.openID,
+                req.type,
+            )
+            eventHandlers.forEach {
+                it.onReq(
+                    tmpReq
+                )
+            }
+        }
+
+        override fun onResp(resp: BaseResp) {
+            var code = ""
+            var extMsg = ""
+            when (resp) {
+                is SendAuthResp -> {
+                    code = resp.code ?: ""
+                }
+
+                is WXLaunchMiniProgramResp -> {
+                    extMsg = resp.extMsg ?: ""
+                }
+
+                else -> {}
+            }
+
+            val tmpResp = BaseResp(
+                code,
+                extMsg,
+                resp.errCode,
+                resp.errStr,
+                type = resp.type
+            )
+            eventHandlers.forEach { it.onResp(tmpResp) }
+        }
     }
 }

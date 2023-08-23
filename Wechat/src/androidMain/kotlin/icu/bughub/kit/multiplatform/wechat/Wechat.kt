@@ -18,12 +18,13 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
 
 actual object Wechat {
 
-    private lateinit var api: IWXAPI
+    lateinit var api: IWXAPI
 
     fun register(context: Context, appId: String) {
         api = WXAPIFactory.createWXAPI(context, appId, false)
         api.registerApp(appId)
     }
+
 
     /**
      * 分享
@@ -189,4 +190,20 @@ actual object Wechat {
         req.url = url
         api.sendReq(req)
     }
+
+    actual fun addEventHandler(eventHandler: EventHandler) {
+        eventHandlers.add(eventHandler)
+    }
+
+    /**
+     * 移除监听
+     *
+     * @param eventHandler
+     */
+    actual fun removeEventHandler(eventHandler: EventHandler) {
+        eventHandlers.remove(eventHandler)
+    }
+
+    actual val eventHandlers: MutableSet<EventHandler>
+        get() = mutableSetOf()
 }
