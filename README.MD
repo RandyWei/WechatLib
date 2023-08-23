@@ -114,7 +114,22 @@ Wechat.launchCustomerService(corpId,url)
 
 ## 对象说明
 
-### MediaMessage（微信媒体消息内容）说明
+### [MediaMessage](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaMessage.kt)（微信媒体消息内容）说明
+
+这个对应官方的WXMediaMessage
+
 |字段|类型|含义|备注|
 |-|-|-|-|
+|sdkVer|Int|版本号|仅Android平台|
 |title|String|消息标题|限制长度不超过512Bytes|
+|description|String|描述内容|限制长度不超过1KB|
+|thumbData|ByteArray|缩略图的二进制数据|限制内容大小不超过32KB|
+|mediaObject|MediaObject|多媒体数据对象|可以为TextObject、ImageObject、MusicVideoObject、VideoObject、WebpageObject、MusicVideoObject等|
+|messageExt|String|额外信息|mediaObject为WXMusicVideoObject时，从微信音乐播放器内跳回，会携带该参数，长度不能超过2k。（iOS、Android双平台要一致）|
+|thumbDataHash|String|消息缩略图数据的sha256|用于签名，详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
+|msgSignature|String|消息签名|详情可见 [OpenSDK 分享签名开发手册](https://developers.weixin.qq.com/doc/oplatform/Mobile_App/Share_and_Favorites/OpenSDK_Signature.html)|
+
+### [TextObject](Wechat/src/commonMain/kotlin/icu/bughub/kit/multiplatform/wechat/MediaObject.kt) (MediaObject 的派生类，用于描述一个文本对象)
+|字段|类型|含义|备注|
+|-|-|-|-|
+|text|String|文本数据|长度需大于 0 且不超过 10KB|
