@@ -13,6 +13,12 @@ package icu.bughub.kit.multiplatform.wechat
  */
 data class MediaMessage(
     /**
+     * sdk 版本号
+     *
+     * 仅支持Android
+     */
+    var sdkVer: Int? = null,
+    /**
      * 消息标题，限制长度不超过512Bytes
      */
     var title: String = "",

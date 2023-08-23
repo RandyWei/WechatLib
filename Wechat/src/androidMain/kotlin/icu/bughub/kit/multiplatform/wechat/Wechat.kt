@@ -33,11 +33,19 @@ actual object Wechat {
      */
     actual fun share(mediaMessage: MediaMessage, scene: WXScene) {
         val msg = WXMediaMessage()
+        mediaMessage.sdkVer?.let {
+            msg.sdkVer = it
+        }
+        msg.title = mediaMessage.title
+        msg.description = mediaMessage.description
+        msg.thumbData = mediaMessage.thumbData
+        msg.messageExt = mediaMessage.messageExt
+        msg.thumbDataHash = mediaMessage.thumbDataHash
+        msg.msgSignature = mediaMessage.msgSignature
         val req = SendMessageToWX.Req()
         req.transaction = System.currentTimeMillis().toString()
-        val mediaObject = mediaMessage.mediaObject
 
-        when (mediaObject) {
+        when (val mediaObject = mediaMessage.mediaObject) {
             is TextObject -> {
                 val obj = WXTextObject()
                 obj.text = mediaObject.text
@@ -64,9 +72,10 @@ actual object Wechat {
 
             is WebpageObject -> {
                 val webpageObject = WXWebpageObject()
-                webpageObject.webpageUrl =mediaObject.webpageUrl
+                webpageObject.webpageUrl = mediaObject.webpageUrl
                 msg.mediaObject = webpageObject
             }
+
             is MiniProgramObject -> {
                 val miniObject = WXMiniProgramObject()
                 miniObject.webpageUrl = mediaObject.webpageUrl
@@ -77,6 +86,7 @@ actual object Wechat {
 
                 msg.mediaObject = miniObject
             }
+
             is MusicVideoObject -> {
                 val mvObject = WXMusicVideoObject()
                 mvObject.musicUrl = mediaObject.musicUrl
@@ -92,6 +102,7 @@ actual object Wechat {
                 mvObject.hdAlbumThumbFileHash = mediaObject.hdAlbumThumbFileHash
                 mvObject.hdAlbumThumbFilePath = mediaObject.hdAlbumThumbFilePath
             }
+
             else -> {}
         }
         req.message = msg
