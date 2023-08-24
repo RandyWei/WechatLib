@@ -2,7 +2,7 @@ package icu.bughub.kit.multiplatform.wechat
 
 expect object Wechat {
 
-    val eventHandlers:MutableSet<EventHandler>
+    internal val eventHandlers:MutableSet<EventHandler>
 
     /**
      * 增加回调监听
