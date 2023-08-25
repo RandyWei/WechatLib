@@ -20,6 +20,12 @@ actual object Wechat {
 
     lateinit var api: IWXAPI
 
+    /**
+     * 注册APP到微信
+     *
+     * @param context
+     * @param appId
+     */
     fun register(context: Context, appId: String) {
         api = WXAPIFactory.createWXAPI(context, appId, false)
         api.registerApp(appId)
