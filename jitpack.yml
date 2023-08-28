@@ -1,2 +1,3 @@
-jdk:
-  - openjdk17
+before_install:
+  - echo "Runing a custom before install command"
+  - sdk install java 17.0.6-open
