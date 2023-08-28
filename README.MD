@@ -28,7 +28,26 @@ Kotlin版本要求：1.9.x
 在:shared模块下的build.gradle.kts增加如下配置
 
 ```kts
-implementation("")
+kotlin {
+    ...
+    cocoapods{
+        ...
+        //添加微信官方sdk配置，只需要linkOnly就行，因为这个库本身已经集成了
+        pod("WechatOpenSDK-XCFramework" ) {
+            linkOnly = true
+            version = "2.0.2" //保持版本号和WechatLib集成的SDK版本一致
+        }
+    }
+    
+    sourceSets{
+        val commonMain by getting {
+            ...
+            //集成
+            implementation("icu.bughub.kit:Wechat:0.0.1")
+        }
+    }
+}
+
 ```
 
 ### iOS
@@ -67,10 +86,10 @@ Wechat.register(context, appId)
 Wechat.register(appID, universalLink, selfCheck = false)
 
 //重写 AppDelegate 的 handleOpenURL 和 openURL 方法：
-Wechat.handleOpenUrl(url)
+WechatLib.shared.handleOpenUrl(url:url)
 
 //重写AppDelegate或SceneDelegate的continueUserActivity方法： 注意：适配了SceneDelegate的App，系统将会回调SceneDelegate的continueUserActivity方法，所以需要重写SceneDelegate的该方法。
-Wechat.handleOpenUniversalLink(userActivity)
+WechatLib.shared.handleOpenUniversalLink(userActivity:userActivity)
 
 ```
 
