@@ -1,3 +1,4 @@
 before_install:
   - echo "Runing a custom before install command"
-  - sdk install java 17.0.6-open
+  - sdk install java 19.0.2-open
+  - sdk use java 19.0.2-open
