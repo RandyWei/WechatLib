@@ -78,3 +78,12 @@ android {
         minSdk = 24
     }
 }
+afterEvaluate {
+    publishing{
+        publications {
+            create<MavenPublication>("release"){
+                artifactId = "WechatLib"
+            }
+        }
+    }
+}
